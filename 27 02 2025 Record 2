@@ -316,10 +316,11 @@ mysql> select * from CUSTOMER;
 2 rows in set (0.00 sec)
 
 
-6.Delete the first two records of INVOICE_ITEM table its purchase quantity is high.
+6.Delete the first two records of INVOICE_ITEM table.
 delete from invoice_item limit 1;
 Query OK, 1 row affected (0.16 sec)
 
 mysql> select * from invoice_item;
 Empty set (0.00 sec)
 
+//VERIFIED
