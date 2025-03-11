@@ -1,0 +1,189 @@
+TCL COMMANDS
+
+1.COMMIT
+
+  mysql> select * from MARK;
++--------+-------+-------+-------+-------+
+| rollno | mark1 | mark2 | mark3 | grade |
++--------+-------+-------+-------+-------+
+|      1 |    15 |    10 |    15 | A     |
+|      2 |    20 |    25 |    30 | c     |
+|      2 |    10 |    30 |    25 | B     |
+|      1 |    20 |    15 |    30 | A     |
++--------+-------+-------+-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> set autocommit=off;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from MARK where rollno=1;
+Query OK, 2 rows affected (0.00 sec)
+
+mysql> select * from MARK;
++--------+-------+-------+-------+-------+
+| rollno | mark1 | mark2 | mark3 | grade |
++--------+-------+-------+-------+-------+
+|      2 |    20 |    25 |    30 | c     |
+|      2 |    10 |    30 |    25 | B     |
++--------+-------+-------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> delete from MARK where rollno=2;
+Query OK, 2 rows affected (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> select * from MARK;
++--------+-------+-------+-------+-------+
+| rollno | mark1 | mark2 | mark3 | grade |
++--------+-------+-------+-------+-------+
+|      1 |    15 |    10 |    15 | A     |
+|      1 |    20 |    15 |    30 | A     |
++--------+-------+-------+-------+-------+
+2 rows in set (0.00 sec)
+
+2.ROLLBACK
+  
+ delete from MARK where rollno=1;
+Query OK, 2 rows affected (0.00 sec)
+
+mysql> select * from MARK;
++--------+-------+-------+-------+-------+
+| rollno | mark1 | mark2 | mark3 | grade |
++--------+-------+-------+-------+-------+
+|      2 |    20 |    25 |    30 | c     |
+|      2 |    10 |    30 |    25 | B     |
++--------+-------+-------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> select * from MARK;
++--------+-------+-------+-------+-------+
+| rollno | mark1 | mark2 | mark3 | grade |
++--------+-------+-------+-------+-------+
+|      1 |    15 |    10 |    15 | A     |
+|      2 |    20 |    25 |    30 | c     |
+|      2 |    10 |    30 |    25 | B     |
+|      1 |    20 |    15 |    30 | A     |
++--------+-------+-------+-------+-------+
+4 rows in set (0.00 sec)
+
+3.SAVEPOINT
+ 
+ mysql> set autocommit=off;
+Query OK, 0 rows affected (0.00 sec)
+mysql> select * from STUDENT2;
++---------+------+------+
+| roll_no | name | age  |
++---------+------+------+
+|       1 | Twe  |   10 |
+|       2 | Asd  |   12 |
+|       3 | You  |   15 |
++---------+------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into STUDENT2 values(4,'Qwe',18);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into STUDENT2 values(5,'ywe',20);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into STUDENT2 values(6,'Pht',25);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> savepoint s3;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from STUDENT2;
++---------+------+------+
+| roll_no | name | age  |
++---------+------+------+
+|       1 | Twe  |   10 |
+|       2 | Asd  |   12 |
+|       3 | You  |   15 |
+|       4 | Qwe  |   18 |
+|       5 | ywe  |   20 |
+|       6 | Pht  |   25 |
++---------+------+------+
+6 rows in set (0.00 sec)
+
+mysql> rollback to s2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from STUDENT2;
++---------+------+------+
+| roll_no | name | age  |
++---------+------+------+
+|       1 | Twe  |   10 |
+|       2 | Asd  |   12 |
+|       3 | You  |   15 |
+|       4 | Qwe  |   18 |
+|       5 | ywe  |   20 |
++---------+------+------+
+5 rows in set (0.00 sec)
+
+DCL COMMANDS
+
+1.GRANT
+
+a.Give insert and select privilege to user 1 on customer table in the invoice database
+
+mysql> create user ABC@'localhost' IDENTIFIED BY 'StrP@ssw0rd';
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> GRANT INSERT,SELECT ON CUSTOMER TO ABC@'localhost';
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> show grants for ABC@'localhost';
++-------------------------------------------------------------------+
+| Grants for ABC@localhost                                          |
++-------------------------------------------------------------------+
+| GRANT USAGE ON *.* TO `ABC`@`localhost`                           |
+| GRANT SELECT, INSERT ON `INVOICE`.`CUSTOMER` TO `ABC`@`localhost` |
++-------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+b.Give update and delete privilege to user 2 on all table in the invoice database
+
+mysql> create user DEF@'localhost' IDENTIFIED BY 'M0ney$Tr33!2025';
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> GRANT UPDATE,DELETE ON INVOICE.* TO DEF@'localhost';
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> show grants for DEF@'localhost';
++----------------------------------------------------------+
+| Grants for DEF@localhost                                 |
++----------------------------------------------------------+
+| GRANT USAGE ON *.* TO `DEF`@`localhost`                  |
+| GRANT UPDATE, DELETE ON `INVOICE`.* TO `DEF`@`localhost` |
++----------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+
+2.REVOKE
+
+a.Remove delete privilege of user2
+
+mysql> REVOKE DELETE ON INVOICE.* from DEF@'localhost';
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> show grants for DEF@'localhost';
++--------------------------------------------------+
+| Grants for DEF@localhost                         |
++--------------------------------------------------+
+| GRANT USAGE ON *.* TO `DEF`@`localhost`          |
+| GRANT UPDATE ON `INVOICE`.* TO `DEF`@`localhost` |
++--------------------------------------------------+
+2 rows in set (0.00 sec)
+
+
