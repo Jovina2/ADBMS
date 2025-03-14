@@ -176,4 +176,4 @@ mysql> SELECT CONCAT(name, ' lives in ', city) AS cust_location FROM CUSTOMER;
 +-----------------------+
 7 rows in set (0.00 sec)
 
-
+//VERIFIED
