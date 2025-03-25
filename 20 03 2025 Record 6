@@ -1,0 +1,83 @@
+ ACCESSING DATABASES: (VIEWS)
+
+1. Create a view for customers who have purchased products.
+
+mysql> select * from CUSTOMER;
++-------+---------+-------------+---------+------------+
+| id    | name    | address     | city    | ph_no      |
++-------+---------+-------------+---------+------------+
+| 10001 | John    | Springfield | calicut | 1234567890 |
+| 10002 | Jane    | kakkanad    | ekm     |       NULL |
+| 10003 | Bob     | Pine Ln     | tvm     |  345678201 |
+| 10004 | Alice   | Oak Rd      | ekm     |       NULL |
+| 10005 | Charlie | Maple Ave   | wyd     |  567890123 |
+| 10006 | Joe     | NYC         | ekm     |  789456123 |
+| 10007 | abc     | UK          | ekm     |   74185296 |
++-------+---------+-------------+---------+------------+
+7 rows in set (0.00 sec)
+
+
+mysql> select * from invoice_master;
++--------+---------+------------+
+| inv_id | cust_id | inv_date   |
++--------+---------+------------+
+|    101 |   10001 | 2023-01-15 |
+|    102 |   10002 | 2023-05-20 |
+|    103 |   10003 | 2024-03-05 |
+|    104 |   10004 | 2024-06-15 |
+|    105 |   10005 | 2024-08-25 |
++--------+---------+------------+
+5 rows in set (0.03 sec)
+
+mysql> create view cc as select * from CUSTOMER where id in(select cust_id from invoice_master where inv_id in (select inv_id from invoice_item));
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> select * from cc;
++-------+-------+-------------+---------+------------+
+| id    | name  | address     | city    | ph_no      |
++-------+-------+-------------+---------+------------+
+| 10001 | John  | Springfield | calicut | 1234567890 |
+| 10002 | Jane  | kakkanad    | ekm     |       NULL |
+| 10003 | Bob   | Pine Ln     | tvm     |  345678201 |
+| 10004 | Alice | Oak Rd      | ekm     |       NULL |
++-------+-------+-------------+---------+------------+
+4 rows in set (0.04 sec)
+
+
+2. Create a view for no sale products
+
+mysql> select * from invoice_item;
++--------+------+----------+
+| inv_id | pid  | quantity |
++--------+------+----------+
+|    101 | 1001 |        1 |
+|    102 | 1002 |        1 |
+|    102 | 1004 |        2 |
+|    103 | 1003 |        5 |
+|    104 | 1002 |        3 |
++--------+------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from PRODUCT;
++------+----------+-------+
+| pid  | pname    | price |
++------+----------+-------+
+| 1001 | Pen      |    51 |
+| 1002 | Pencil   |    87 |
+| 1003 | Soap     |   102 |
+| 1004 | Eraser   |   122 |
+| 1005 | Notebook |   148 |
++------+----------+-------+
+5 rows in set (0.02 sec)
+
+mysql> create view pp as  select * from PRODUCT where pid not in (select pid from invoice_item);
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> select * from pp;
++------+----------+-------+
+| pid  | pname    | price |
++------+----------+-------+
+| 1005 | Notebook |   148 |
++------+----------+-------+
+1 row in set (0.00 sec)
+
