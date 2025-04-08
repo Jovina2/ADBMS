@@ -1,0 +1,102 @@
+PL/SQL PROGRAMS- STORED PROCEDURES
+
+1.Create a procedure to display all tables in the invoice database.
+
+mysql> delimiter $$
+mysql> CREATE PROCEDURE DISPLAY1() 
+    -> BEGIN
+    -> SELECT * FROM CUSTOMER;
+    -> SELECT * FROM PRODUCT;
+    -> SELECT * FROM invoice_item;
+    -> SELECT * FROM invoice_master;
+    -> END
+    -> $$
+mysql> CALL DISPLAY1() $$
++-------+---------+-------------+---------+------------+
+| id    | name    | address     | city    | ph_no      |
++-------+---------+-------------+---------+------------+
+| 10001 | John    | Springfield | calicut | 1234567890 |
+| 10002 | Jane    | kakkanad    | ekm     |       NULL |
+| 10003 | Bob     | Pine Ln     | tvm     |  345678201 |
+| 10004 | Alice   | Oak Rd      | ekm     |       NULL |
+| 10005 | Charlie | Maple Ave   | wyd     |  567890123 |
+| 10006 | Joe     | NYC         | ekm     |  789456123 |
+| 10007 | abc     | UK          | ekm     |   74185296 |
+| 10008 | Abc     | Ave street  | calicut |       NULL |
++-------+---------+-------------+---------+------------+
+8 rows in set (0.02 sec)
+
++------+----------+-------+
+| pid  | pname    | price |
++------+----------+-------+
+| 1001 | Pen      |    51 |
+| 1002 | Pencil   |    87 |
+| 1003 | Soap     |   102 |
+| 1004 | Eraser   |   122 |
+| 1005 | Notebook |   148 |
++------+----------+-------+
+5 rows in set (0.02 sec)
+
++--------+------+----------+
+| inv_id | pid  | quantity |
++--------+------+----------+
+|    101 | 1001 |        1 |
+|    102 | 1002 |        1 |
+|    102 | 1004 |        2 |
+|    103 | 1003 |        5 |
+|    104 | 1002 |        3 |
++--------+------+----------+
+5 rows in set (0.04 sec)
+
++--------+---------+------------+
+| inv_id | cust_id | inv_date   |
++--------+---------+------------+
+|    101 |   10001 | 2023-01-15 |
+|    102 |   10002 | 2023-05-20 |
+|    103 |   10003 | 2024-03-05 |
+|    104 |   10004 | 2024-06-15 |
+|    105 |   10005 | 2024-08-25 |
++--------+---------+------------+
+5 rows in set (0.06 sec)
+
+Query OK, 0 rows affected (0.06 sec)
+
+2.Create a procedure to find greatest of 3 numbers.
+
+mysql> delimiter ##
+mysql> create procedure FindGreatest(IN num1 INT,IN num2 INT,IN num3 INT,OUT greatest INT)
+    -> BEGIN
+    -> SET GREATEST = GREATEST(num1,num2,num3);
+    -> END ##
+Query OK, 0 rows affected (0.16 sec)
+
+mysql> call FindGreatest(10,20,45,@g) ##
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select 45 AS GreatestNumber;
+    -> ##
++----------------+
+| GreatestNumber |
++----------------+
+|             45 |
++----------------+
+1 row in set (0.01 sec)
+
+3.Create a procedure to display invoice details of a particular customer.
+
+mysql> create procedure data(in v1 varchar(10)) select II.* from invoice_item II inner join invoice_master IM on II.inv_id=IM.inv_id inner join CUSTOMER C on C.id=IM.cust_id where C.name=v1;
+Query OK, 0 rows affected (0.15 sec)
+
+mysql> call data('John');
++--------+------+----------+
+| inv_id | pid  | quantity |
++--------+------+----------+
+|    101 | 1001 |        1 |
++--------+------+----------+
+1 row in set (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+
+
+
