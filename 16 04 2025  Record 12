@@ -93,3 +93,4 @@ INVOICE> db.CUSTOMER.deleteOne({city:"Us"})
 { acknowledged: true, deletedCount: 1 }
 
 
+//VERIFIED
