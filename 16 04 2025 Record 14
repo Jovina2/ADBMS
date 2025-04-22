@@ -1,0 +1,132 @@
+1.Write a MongoDB query to sort customer details in ascending order of their name.
+
+test> use INVOICE
+switched to db INVOICE
+INVOICE> db.CUSTOMER.find().sort({name:1})
+[
+  {
+    _id: ObjectId('67ff709e9de7be2793ef634b'),
+    customer_id: 1,
+    name: 'Jacob',
+    city: 'Chicago',
+    email: 'jacob@example.com'
+  },
+  {
+    _id: ObjectId('67ff76649de7be2793ef6350'),
+    customer_id: 3,
+    name: 'Laya',
+    city: 'calicut',
+    email: 'laya0@example.com'
+  },
+  {
+    _id: ObjectId('67ff76649de7be2793ef6351'),
+    customer_id: 4,
+    name: 'Racheal',
+    city: 'tvm',
+    email: 'racheal@example.com'
+  },
+  {
+    _id: ObjectId('67ff76649de7be2793ef634f'),
+    customer_id: 2,
+    name: 'Riya',
+    city: 'ekm',
+    email: 'riya120@example.com'
+  }
+]
+
+2.Write a MongoDB query to count number of customers in each city.
+
+INVOICE> db.CUSTOMER.aggregate([
+... {
+... $group: {
+... _id: "$city",
+... totalcustomerCount: { $sum: 1 }
+... }
+... }
+... ])
+[
+  { _id: 'Chicago', totalcustomerCount: 1 },
+  { _id: 'tvm', totalcustomerCount: 1 },
+  { _id: 'calicut', totalcustomerCount: 2 }
+]
+
+3.Write a MongoDB query to find minimum and maximum age in each city.
+
+INVOICE> db.CUSTOMER.aggregate([ 
+... {
+... $group: { 
+... _id: "$city", 
+... minAge: { $min: "$age" }, 
+... maxAge: { $max: "$age" }
+... }
+... }
+... ]);
+ [
+  { _id: 'Chicago', minAge: 30, maxAge: 30 },
+  { _id: 'tvm', minAge: 15, maxAge: 15 },
+  { _id: 'calicut', minAge: 25, maxAge: 50 }
+]
+
+
+4.Write a MongoDB query using the $match stage to retrieve all customer documents whose customer_name starts with the letter “S”.
+
+INVOICE> db.CUSTOMER.find({
+... name:{$regex:/S/}
+... })
+[
+  {
+    _id: ObjectId('67ff76649de7be2793ef634f'),
+    customer_id: 2,
+    name: 'Sam',
+    city: 'calicut',
+    email: 'riya120@example.com',
+    age: 25
+  }
+]
+
+5.Write a query using $lookup to join CUSTOMER and PRODUCT collections and display only customer name, product name, and price.
+
+INVOICE> db.CUSTOMER.aggregate([ 
+... {
+... $lookup:{
+... from:"PRODUCT",
+... localField:"p_id",
+... foreignField:"p_id",
+... as:"product_info"
+... }
+... },
+... {
+... $unwind:"$product_info"
+... },
+... {
+... $project:{
+... _id:0,
+... customer_name:"$name",
+... product_name:"$product_info.name",
+... price:"product_info.price"
+... }
+... }
+... ]);
+[
+  {
+    customer_name: 'Jacob',
+    product_name: 'Laptop',
+    price: 'product_info.price'
+  },
+  {
+    customer_name: 'Sam',
+    product_name: 'Mouse',
+    price: 'product_info.price'
+  },
+  {
+    customer_name: 'Laya',
+    product_name: 'Mobile Phone',
+    price: 'product_info.price'
+  },
+  {
+    customer_name: 'Racheal',
+    product_name: 'Keyboard',
+    price: 'product_info.price'
+  }
+]
+
