@@ -1,0 +1,174 @@
+(base) ksb@ksb-OptiPlex-3060:~$ mongosh --port 27017
+Current Mongosh Log ID:	680a1025567c71eb15ef634a
+Connecting to:		mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.3
+Using MongoDB:		7.0.8
+Using Mongosh:		2.2.3
+mongosh 2.5.0 is available for download: https://www.mongodb.com/try/download/shell
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2025-04-24T15:48:41.890+05:30: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2025-04-24T15:48:43.186+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2025-04-24T15:48:43.187+05:30: Soft rlimits for open file descriptors too low
+------
+
+test> rs.initiate({
+...  _id: "rs0",
+...  members: [
+...  { _id: 0, host: "localhost:27017" },
+...  { _id: 1, host: "localhost:27018" },
+...  { _id: 2, host: "localhost:27019" }
+...  ]
+...  })
+{ ok: 1 }
+rs0 [direct: other] test> rs.status()
+{
+  set: 'rs0',
+  date: ISODate('2025-04-24T10:20:33.403Z'),
+  myState: 1,
+  term: Long('1'),
+  syncSourceHost: '',
+  syncSourceId: -1,
+  heartbeatIntervalMillis: Long('2000'),
+  majorityVoteCount: 2,
+  writeMajorityCount: 2,
+  votingMembersCount: 3,
+  writableVotingMembersCount: 3,
+  optimes: {
+    lastCommittedOpTime: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+    lastCommittedWallTime: ISODate('2025-04-24T10:20:25.024Z'),
+    readConcernMajorityOpTime: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+    appliedOpTime: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+    durableOpTime: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+    lastAppliedWallTime: ISODate('2025-04-24T10:20:25.024Z'),
+    lastDurableWallTime: ISODate('2025-04-24T10:20:25.024Z')
+  },
+  lastStableRecoveryTimestamp: Timestamp({ t: 1745490006, i: 1 }),
+  electionCandidateMetrics: {
+    lastElectionReason: 'electionTimeout',
+    lastElectionDate: ISODate('2025-04-24T10:20:18.499Z'),
+    electionTerm: Long('1'),
+    lastCommittedOpTimeAtElection: { ts: Timestamp({ t: 1745490006, i: 1 }), t: Long('-1') },
+    lastSeenOpTimeAtElection: { ts: Timestamp({ t: 1745490006, i: 1 }), t: Long('-1') },
+    numVotesNeeded: 2,
+    priorityAtElection: 1,
+    electionTimeoutMillis: Long('10000'),
+    numCatchUpOps: Long('0'),
+    newTermStartDate: ISODate('2025-04-24T10:20:19.109Z'),
+    wMajorityWriteAvailabilityDate: ISODate('2025-04-24T10:20:20.812Z')
+  },
+  members: [
+    {
+      _id: 0,
+      name: 'localhost:27017',
+      health: 1,
+      state: 1,
+      stateStr: 'PRIMARY',
+      uptime: 112,
+      optime: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+      optimeDate: ISODate('2025-04-24T10:20:25.000Z'),
+      lastAppliedWallTime: ISODate('2025-04-24T10:20:25.024Z'),
+      lastDurableWallTime: ISODate('2025-04-24T10:20:25.024Z'),
+      syncSourceHost: '',
+      syncSourceId: -1,
+      infoMessage: 'Could not find member to sync from',
+      electionTime: Timestamp({ t: 1745490018, i: 1 }),
+      electionDate: ISODate('2025-04-24T10:20:18.000Z'),
+      configVersion: 1,
+      configTerm: 1,
+      self: true,
+      lastHeartbeatMessage: ''
+    },
+    {
+      _id: 1,
+      name: 'localhost:27018',
+      health: 1,
+      state: 2,
+      stateStr: 'SECONDARY',
+      uptime: 25,
+      optime: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+      optimeDurable: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+      optimeDate: ISODate('2025-04-24T10:20:25.000Z'),
+      optimeDurableDate: ISODate('2025-04-24T10:20:25.000Z'),
+      lastAppliedWallTime: ISODate('2025-04-24T10:20:25.024Z'),
+      lastDurableWallTime: ISODate('2025-04-24T10:20:25.024Z'),
+      lastHeartbeat: ISODate('2025-04-24T10:20:32.610Z'),
+      lastHeartbeatRecv: ISODate('2025-04-24T10:20:33.110Z'),
+      pingMs: Long('0'),
+      lastHeartbeatMessage: '',
+      syncSourceHost: 'localhost:27017',
+      syncSourceId: 0,
+      infoMessage: '',
+      configVersion: 1,
+      configTerm: 1
+    },
+    {
+      _id: 2,
+      name: 'localhost:27019',
+      health: 1,
+      state: 2,
+      stateStr: 'SECONDARY',
+      uptime: 25,
+      optime: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+      optimeDurable: { ts: Timestamp({ t: 1745490025, i: 1 }), t: Long('1') },
+      optimeDate: ISODate('2025-04-24T10:20:25.000Z'),
+      optimeDurableDate: ISODate('2025-04-24T10:20:25.000Z'),
+      lastAppliedWallTime: ISODate('2025-04-24T10:20:25.024Z'),
+      lastDurableWallTime: ISODate('2025-04-24T10:20:25.024Z'),
+      lastHeartbeat: ISODate('2025-04-24T10:20:32.610Z'),
+      lastHeartbeatRecv: ISODate('2025-04-24T10:20:31.611Z'),
+      pingMs: Long('0'),
+      lastHeartbeatMessage: '',
+      syncSourceHost: 'localhost:27017',
+      syncSourceId: 0,
+      infoMessage: '',
+      configVersion: 1,
+      configTerm: 1
+    }
+  ],
+  ok: 1,
+  '$clusterTime': {
+    clusterTime: Timestamp({ t: 1745490025, i: 1 }),
+    signature: {
+      hash: Binary.createFromBase64('AAAAAAAAAAAAAAAAAAAAAAAAAAA=', 0),
+      keyId: Long('0')
+    }
+  },
+  operationTime: Timestamp({ t: 1745490025, i: 1 })
+}
+rs0 [direct: primary] test> use testDB
+switched to db testDB
+rs0 [direct: primary] testDB> db.customers.insertOne({
+...  name: "Anjana",
+...  city: "ekm",
+...  age: 30
+...  })
+{
+  acknowledged: true,
+  insertedId: ObjectId('680a10a9567c71eb15ef634b')
+}
+rs0 [direct: primary] testDB> db.customers.find().pretty()
+[
+  {
+    _id: ObjectId('680a10a9567c71eb15ef634b'),
+    name: 'Anjana',
+    city: 'ekm',
+    age: 30
+  }
+]
+rs0 [direct: primary] testDB> 
+
+rs0 [direct: secondary] test> use testDB
+switched to db testDB
+rs0 [direct: secondary] testDB> db.customers.find().pretty()
+[
+  {
+    _id: ObjectId('680a10a9567c71eb15ef634b'),
+    name: 'Anjana',
+    city: 'ekm',
+    age: 30
+  }
+]
+
